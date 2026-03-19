@@ -45,13 +45,13 @@ flowchart TD
 
   %% Conversation persistence
   MP --> CS[ConversationService]
-  CS --> DB[(PostgreSQL + pgvector)]
+  CS --> DB[PostgreSQL with pgvector]
 
   %% Optional RAG path
-  MP -->|if in-domain & not FAQ| RAG[RagService]
-  RAG --> VSR[VectorSearchService (cosine similarity)]
+  MP -->|if in-domain and not FAQ| RAG[RagService]
+  RAG --> VSR[VectorSearchService cosine similarity]
   VSR --> DB
-  RAG --> OAI[OllamaService (generate)]
+  RAG --> OAI[OllamaService generate]
   OAI --> OLLAMA[Ollama Server]
 
   %% Outbound WhatsApp reply
@@ -59,10 +59,10 @@ flowchart TD
   WAS --> Meta
 
   %% Knowledge ingestion path (Admin)
-  UP[Admin: KnowledgeController (file upload)] --> JOB[KnowledgeIngestionWorker]
-  JOB --> DOCS[DocumentService (extract + normalize text)]
-  DOCS --> CHUNK[TextChunkingService (~500 chars)]
-  CHUNK --> EMB[EmbeddingService (/api/embeddings)]
+  UP[Admin: KnowledgeController file upload] --> JOB[KnowledgeIngestionWorker]
+  JOB --> DOCS[DocumentService extract and normalize text]
+  DOCS --> CHUNK[TextChunkingService 500 chars]
+  CHUNK --> EMB[EmbeddingService embeddings endpoint]
   EMB --> OLLAMA
   EMB --> DB
 ```
