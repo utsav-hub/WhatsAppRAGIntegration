@@ -28,6 +28,45 @@ Backend starter for a WhatsApp AI assistant using:
 - **Config**
   - `WhatsAppSettings`, `OllamaSettings` bound from `appsettings.json`.
 
+## Architecture Diagram
+
+The diagram below shows both the **runtime path** (incoming WhatsApp messages) and the **knowledge ingestion path** (admin uploads -> chunking -> embeddings -> pgvector store).
+
+```mermaid
+flowchart TD
+  %% Incoming WhatsApp webhook
+  Meta[Meta WhatsApp Cloud API] -->|HTTPS Webhook| WH[WhatsAppWebhookController]
+  WH --> MP[MessageProcessorService]
+
+  %% Config-driven logic
+  MP --> KWD[KeywordService]
+  MP --> FAQ[FaqService]
+  MP --> SET[SettingsService]
+
+  %% Conversation persistence
+  MP --> CS[ConversationService]
+  CS --> DB[(PostgreSQL + pgvector)]
+
+  %% Optional RAG path
+  MP -->|if in-domain & not FAQ| RAG[RagService]
+  RAG --> VSR[VectorSearchService (cosine similarity)]
+  VSR --> DB
+  RAG --> OAI[OllamaService (generate)]
+  OAI --> OLLAMA[Ollama Server]
+
+  %% Outbound WhatsApp reply
+  MP --> WAS[WhatsAppService]
+  WAS --> Meta
+
+  %% Knowledge ingestion path (Admin)
+  UP[Admin: KnowledgeController (file upload)] --> JOB[KnowledgeIngestionWorker]
+  JOB --> DOCS[DocumentService (extract + normalize text)]
+  DOCS --> CHUNK[TextChunkingService (~500 chars)]
+  CHUNK --> EMB[EmbeddingService (/api/embeddings)]
+  EMB --> OLLAMA
+  EMB --> DB
+```
+
 Message flow:
 
 1. WhatsApp sends webhook to `POST /webhook/whatsapp`.
@@ -73,7 +112,7 @@ Message flow:
 
    ```json
    "ConnectionStrings": {
-     "DefaultConnection": "Host=localhost;Port=5432;Database=octology_whatsapp;Username=postgres;Password=yourpassword"
+     "DefaultConnection": "Host=localhost;Port=5432;Database=octology_whatsapp;Username=postgres;Password=<POSTGRES_PASSWORD>"
    }
    ```
 
