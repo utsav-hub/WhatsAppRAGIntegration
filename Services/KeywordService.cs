@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using WhatsAppDev.Data;
+using WhatsAppDev.DTOs;
 using WhatsAppDev.Models;
 
 namespace WhatsAppDev.Services;
@@ -39,6 +40,60 @@ public class KeywordService
             _logger.LogDebug("Loaded {Count} active keywords from database", keywords.Count);
             return keywords;
         })) ?? new List<string>();
+    }
+
+    public async Task<List<ChatbotKeywordDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.ChatbotKeywords
+            .AsNoTracking()
+            .OrderBy(k => k.Keyword)
+            .Select(k => new ChatbotKeywordDto
+            {
+                Id = k.Id,
+                Keyword = k.Keyword,
+                IsActive = k.IsActive,
+                CreatedAt = k.CreatedAt
+            })
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<ChatbotKeywordDto> CreateAsync(CreateChatbotKeywordDto dto, CancellationToken cancellationToken = default)
+    {
+        if (dto == null || string.IsNullOrWhiteSpace(dto.Keyword))
+            throw new ArgumentException("Keyword is required.", nameof(dto));
+
+        var entity = new ChatbotKeyword
+        {
+            Id = Guid.NewGuid(),
+            Keyword = dto.Keyword.Trim(),
+            IsActive = dto.IsActive,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _dbContext.ChatbotKeywords.Add(entity);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        InvalidateCache();
+
+        return new ChatbotKeywordDto
+        {
+            Id = entity.Id,
+            Keyword = entity.Keyword,
+            IsActive = entity.IsActive,
+            CreatedAt = entity.CreatedAt
+        };
+    }
+
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var entity = await _dbContext.ChatbotKeywords.FindAsync(new object[] { id }, cancellationToken);
+        if (entity == null)
+            return false;
+
+        _dbContext.ChatbotKeywords.Remove(entity);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        InvalidateCache();
+
+        return true;
     }
 
     public void InvalidateCache()

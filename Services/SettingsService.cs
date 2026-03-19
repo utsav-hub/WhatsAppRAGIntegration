@@ -2,6 +2,8 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using WhatsAppDev.Data;
+using WhatsAppDev.DTOs;
+using WhatsAppDev.Models;
 
 namespace WhatsAppDev.Services;
 
@@ -48,6 +50,56 @@ public class SettingsService
             _logger.LogDebug("Loaded setting {Key} from database", key);
             return setting ?? null;
         });
+    }
+
+    public async Task<List<ChatbotSettingDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.ChatbotSettings
+            .AsNoTracking()
+            .OrderBy(s => s.SettingKey)
+            .Select(s => new ChatbotSettingDto
+            {
+                SettingKey = s.SettingKey,
+                SettingValue = s.SettingValue
+            })
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task UpsertAsync(IEnumerable<ChatbotSettingDto> settings, CancellationToken cancellationToken = default)
+    {
+        if (settings == null)
+            throw new ArgumentException("Settings are required.", nameof(settings));
+
+        foreach (var item in settings)
+        {
+            if (item == null)
+                continue;
+            if (string.IsNullOrWhiteSpace(item.SettingKey))
+                continue;
+
+            var key = item.SettingKey.Trim();
+            var value = item.SettingValue ?? string.Empty;
+
+            var existing = await _dbContext.ChatbotSettings
+                .FirstOrDefaultAsync(s => s.SettingKey == key, cancellationToken);
+
+            if (existing != null)
+            {
+                existing.SettingValue = value;
+            }
+            else
+            {
+                _dbContext.ChatbotSettings.Add(new ChatbotSetting
+                {
+                    Id = Guid.NewGuid(),
+                    SettingKey = key,
+                    SettingValue = value
+                });
+            }
+        }
+
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        InvalidateCache();
     }
 
     public void InvalidateCache(string? key = null)

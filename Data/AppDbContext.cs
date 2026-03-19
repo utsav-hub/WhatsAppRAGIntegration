@@ -24,7 +24,15 @@ public class AppDbContext : DbContext
     {
         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.HasPostgresExtension("vector");
+        // The pgvector `Vector` type is only supported by the Npgsql provider.
+        // For unit tests using EF Core InMemory, we must ignore the embedding mapping.
+        var providerName = Database.ProviderName ?? string.Empty;
+        var isNpgsql = providerName.Contains("Npgsql", StringComparison.OrdinalIgnoreCase);
+
+        if (isNpgsql)
+        {
+            modelBuilder.HasPostgresExtension("vector");
+        }
 
         modelBuilder.Entity<User>()
             .HasIndex(u => u.PhoneNumber)
@@ -40,8 +48,16 @@ public class AppDbContext : DbContext
             .HasIndex(s => s.SettingKey)
             .IsUnique();
 
-        modelBuilder.Entity<KnowledgeChunk>()
-            .Property(x => x.Embedding)
-            .HasColumnType("vector(768)");
+        if (isNpgsql)
+        {
+            modelBuilder.Entity<KnowledgeChunk>()
+                .Property(x => x.Embedding)
+                .HasColumnType("vector(768)");
+        }
+        else
+        {
+            modelBuilder.Entity<KnowledgeChunk>()
+                .Ignore(x => x.Embedding);
+        }
     }
 }

@@ -42,6 +42,8 @@ builder.Services.AddScoped<DocumentService>();
 builder.Services.AddScoped<VectorSearchService>();
 builder.Services.AddScoped<RagService>();
 builder.Services.AddScoped<MessageProcessorService>();
+builder.Services.AddScoped<AdminAnalyticsService>();
+builder.Services.AddScoped<KnowledgeIngestionJobService>();
 
 // Knowledge ingestion (file upload -> background extraction -> chunk+embed)
 builder.Services.AddScoped<ITextExtractionService, TextExtractionService>();

@@ -2,6 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using WhatsAppDev.Data;
+using WhatsAppDev.DTOs;
 using WhatsAppDev.Models;
 
 namespace WhatsAppDev.Services;
@@ -61,6 +62,67 @@ public class FaqService
             _logger.LogDebug("Loaded {Count} active FAQs from database", list.Count);
             return list;
         })) ?? new List<ChatbotFAQ>();
+    }
+
+    public async Task<List<ChatbotFaqDto>> GetAllAsync(CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.ChatbotFAQs
+            .AsNoTracking()
+            .OrderBy(f => f.TriggerText)
+            .Select(f => new ChatbotFaqDto
+            {
+                Id = f.Id,
+                TriggerText = f.TriggerText,
+                ResponseText = f.ResponseText,
+                IsActive = f.IsActive,
+                CreatedAt = f.CreatedAt
+            })
+            .ToListAsync(cancellationToken);
+    }
+
+    public async Task<ChatbotFaqDto> CreateAsync(CreateChatbotFaqDto dto, CancellationToken cancellationToken = default)
+    {
+        if (dto == null)
+            throw new ArgumentException("FAQ payload is required.", nameof(dto));
+        if (string.IsNullOrWhiteSpace(dto.TriggerText))
+            throw new ArgumentException("TriggerText is required.", nameof(dto));
+        if (string.IsNullOrWhiteSpace(dto.ResponseText))
+            throw new ArgumentException("ResponseText is required.", nameof(dto));
+
+        var entity = new ChatbotFAQ
+        {
+            Id = Guid.NewGuid(),
+            TriggerText = dto.TriggerText.Trim(),
+            ResponseText = dto.ResponseText.Trim(),
+            IsActive = dto.IsActive,
+            CreatedAt = DateTime.UtcNow
+        };
+
+        _dbContext.ChatbotFAQs.Add(entity);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        InvalidateCache();
+
+        return new ChatbotFaqDto
+        {
+            Id = entity.Id,
+            TriggerText = entity.TriggerText,
+            ResponseText = entity.ResponseText,
+            IsActive = entity.IsActive,
+            CreatedAt = entity.CreatedAt
+        };
+    }
+
+    public async Task<bool> DeleteAsync(Guid id, CancellationToken cancellationToken = default)
+    {
+        var entity = await _dbContext.ChatbotFAQs.FindAsync(new object[] { id }, cancellationToken);
+        if (entity == null)
+            return false;
+
+        _dbContext.ChatbotFAQs.Remove(entity);
+        await _dbContext.SaveChangesAsync(cancellationToken);
+        InvalidateCache();
+
+        return true;
     }
 
     public void InvalidateCache()

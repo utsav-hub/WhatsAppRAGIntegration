@@ -1,6 +1,4 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using WhatsAppDev.Data;
 using WhatsAppDev.Models;
 using WhatsAppDev.Services;
 
@@ -11,12 +9,12 @@ namespace WhatsAppDev.Controllers;
 public class KnowledgeController : ControllerBase
 {
     private readonly DocumentService _documentService;
-    private readonly AppDbContext _dbContext;
+    private readonly KnowledgeIngestionJobService _jobService;
 
-    public KnowledgeController(DocumentService documentService, AppDbContext dbContext)
+    public KnowledgeController(DocumentService documentService, KnowledgeIngestionJobService jobService)
     {
         _documentService = documentService;
-        _dbContext = dbContext;
+        _jobService = jobService;
     }
 
     public sealed class KnowledgeRequest
@@ -94,8 +92,7 @@ public class KnowledgeController : ControllerBase
             Status = KnowledgeIngestionJobStatus.Queued
         };
 
-        _dbContext.KnowledgeIngestionJobs.Add(job);
-        await _dbContext.SaveChangesAsync(cancellationToken);
+        await _jobService.CreateJobAsync(job, cancellationToken);
 
         return Accepted(new KnowledgeUploadJobResponse { JobId = job.Id });
     }
@@ -103,9 +100,7 @@ public class KnowledgeController : ControllerBase
     [HttpGet("ingestion-jobs/{id:guid}")]
     public async Task<ActionResult<KnowledgeIngestionJobDto>> GetIngestionJob(Guid id, CancellationToken cancellationToken)
     {
-        var job = await _dbContext.KnowledgeIngestionJobs
-            .AsNoTracking()
-            .FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
+        var job = await _jobService.GetJobAsync(id, cancellationToken);
 
         if (job == null)
             return NotFound();
@@ -125,11 +120,7 @@ public class KnowledgeController : ControllerBase
     [HttpGet]
     public async Task<ActionResult<List<KnowledgeDocument>>> GetAll(CancellationToken cancellationToken)
     {
-        var docs = await _dbContext.KnowledgeDocuments
-            .OrderByDescending(d => d.CreatedAt)
-            .ToListAsync(cancellationToken);
-
-        return Ok(docs);
+        return Ok(await _documentService.GetAllAsync(cancellationToken));
     }
 
     [HttpDelete("{id:guid}")]
