@@ -1,0 +1,70 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.6.4">
+  <diagram name="RAG WhatsApp Architecture" id="0">
+    <mxGraphModel dx="1426" dy="743" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="User (WhatsApp)" vertex="1">
+          <mxGeometry height="70" width="300" x="500" y="20" as="geometry" />
+        </mxCell>
+        <mxCell id="meta" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Meta WhatsApp Cloud API" vertex="1">
+          <mxGeometry height="70" width="300" x="500" y="120" as="geometry" />
+        </mxCell>
+        <mxCell id="webhook" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value=".NET Webhook API" vertex="1">
+          <mxGeometry height="70" width="300" x="500" y="220" as="geometry" />
+        </mxCell>
+        <mxCell id="processor" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Message Processor" vertex="1">
+          <mxGeometry height="70" width="300" x="500" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="vector" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Vector Search (pgvector)" vertex="1">
+          <mxGeometry height="70" width="300" x="500" y="450" as="geometry" />
+        </mxCell>
+        <mxCell id="db" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="PostgreSQL (Knowledge + Embeddings)" vertex="1">
+          <mxGeometry height="70" width="300" x="500" y="560" as="geometry" />
+        </mxCell>
+        <mxCell id="ollama" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Ollama (LLM)" vertex="1">
+          <mxGeometry height="70" width="300" x="500" y="680" as="geometry" />
+        </mxCell>
+        <mxCell id="cache" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Response Cache" vertex="1">
+          <mxGeometry height="70" width="250" x="150" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="faq" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="FAQ Service" vertex="1">
+          <mxGeometry height="70" width="250" x="900" y="280" as="geometry" />
+        </mxCell>
+        <mxCell id="guard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Domain Guard" vertex="1">
+          <mxGeometry height="70" width="250" x="900" y="360" as="geometry" />
+        </mxCell>
+        <mxCell id="dd3JYXWryzDnyOHwIlCN-1" edge="1" parent="1" source="user" style="endArrow=block;strokeWidth=2;" target="meta">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dd3JYXWryzDnyOHwIlCN-2" edge="1" parent="1" source="meta" style="endArrow=block;strokeWidth=2;" target="webhook">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dd3JYXWryzDnyOHwIlCN-3" edge="1" parent="1" source="webhook" style="endArrow=block;strokeWidth=2;" target="processor">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dd3JYXWryzDnyOHwIlCN-4" edge="1" parent="1" source="processor" style="endArrow=block;strokeWidth=2;" target="vector">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dd3JYXWryzDnyOHwIlCN-7" edge="1" parent="1" source="vector" style="endArrow=block;strokeWidth=2;" target="db">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dd3JYXWryzDnyOHwIlCN-8" edge="1" parent="1" source="processor" style="endArrow=block;strokeWidth=2;" target="cache">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dd3JYXWryzDnyOHwIlCN-9" edge="1" parent="1" source="processor" style="endArrow=block;strokeWidth=2;" target="faq">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="dd3JYXWryzDnyOHwIlCN-10" edge="1" parent="1" source="processor" style="endArrow=block;strokeWidth=2;" target="guard">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="wGRVMnhdBXIFZ6t2DTgi-11" edge="1" parent="1" source="db" style="endArrow=block;strokeWidth=2;exitX=0.5;exitY=1;exitDx=0;exitDy=0;entryX=0.5;entryY=0;entryDx=0;entryDy=0;" target="ollama">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="970" y="580" as="sourcePoint" />
+            <mxPoint x="970" y="620" as="targetPoint" />
+          </mxGeometry>
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

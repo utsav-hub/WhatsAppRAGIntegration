@@ -1,0 +1,20 @@
+EAAWnS10IZBpEBQzDESCQXl5ZC96PxoR95CLemchzupoWzjclLWzSuGDb1DQQDljHHSlZBefwNIYOEvWDgDQ2pcNUbvkkQyUm2RnJLGASVWIhk2UjmeoOLQZATLxGy77lhZA1LKk8OFGjE1jDnvQQq9avx1RTZBVSdsIW3FQJ9RQOG2qThf2M1xlspk8wuS4trpzGnYE7VyPMFyy0YhNGT5QCxKNJZAGWZAWT2VZBkD8nkVV8hDa1Uu48RjJiHYvx9n5BbWvjZCvXD2LxZAkjF2BwWbdapLrYNT1MnCh8i4ZBqQZDZD
+
+Access Token
+
+
+https://developers.facebook.com/apps/1591317008808593/alerts/?business_id=9711591942189058
+https://business.facebook.com/latest/settings/whatsapp_account/?business_id=9711591942189058&nav_ref=bm_settings_redirect_migration&bm_redirect_migration=true&selected_asset_id=910636541761698&selected_asset_type=whatsapp-business-account
+
+need ngrok to expose localhost:5000
+
+For that 
+
+ngrok account opened 
+its url is https://josie-knapsacked-alena.ngrok-free.dev/
+
+and in WhatsApp webhook setup it will be https://josie-knapsacked-alena.ngrok-free.dev/webhook
+
+ngrok token is :
+
+ngrok config add-authtoken 3Ao898abPYKGfD4QAtnOOIMQ6Yl_6WogZntTjs2eByvKyEMKu

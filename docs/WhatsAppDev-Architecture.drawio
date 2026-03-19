@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2025-03-12T00:00:00.000Z" agent="WhatsAppDev" version="22.1.0" type="device">
+  <diagram id="WhatsAppArch" name="WhatsApp Octology Architecture">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <mxCell id="title" value="&lt;b&gt;WhatsApp AI Assistant — System Architecture&lt;/b&gt;&lt;br&gt;Octology · ASP.NET Core · PostgreSQL · Ollama · React Admin" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;fontSize=14;" vertex="1" parent="1">
+          <mxGeometry x="280" y="10" width="560" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zone1" value="Users" style="swimlane;fontStyle=1;horizontal=0;startSize=28;fillColor=#E1D5E7;strokeColor=#9673A6;" vertex="1" parent="1">
+          <mxGeometry x="40" y="70" width="140" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="user" value="WhatsApp&#xa;User (phone)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="zone1">
+          <mxGeometry x="20" y="40" width="100" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zone2" value="Meta Cloud" style="swimlane;fontStyle=1;horizontal=0;startSize=28;fillColor=#DAE8FC;strokeColor=#6C8EBF;" vertex="1" parent="1">
+          <mxGeometry x="220" y="70" width="160" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="meta" value="WhatsApp&#xa;Cloud API" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="zone2">
+          <mxGeometry x="25" y="40" width="110" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zone3" value="Edge (dev)" style="swimlane;fontStyle=1;horizontal=0;startSize=28;fillColor=#FFF4C3;strokeColor=#D6B656;" vertex="1" parent="1">
+          <mxGeometry x="420" y="70" width="130" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="ngrok" value="ngrok&#xa;(public HTTPS)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff9e6;strokeColor=#d6b656;" vertex="1" parent="zone3">
+          <mxGeometry x="15" y="40" width="100" height="50" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zone4" value="ASP.NET Core API" style="swimlane;fontStyle=1;horizontal=0;startSize=28;fillColor=#D5E8D4;strokeColor=#82B366;" vertex="1" parent="1">
+          <mxGeometry x="40" y="200" width="700" height="320" as="geometry" />
+        </mxCell>
+        <mxCell id="wh" value="WhatsAppWebhookController&#xa;GET /webhook (verify)&#xa;POST /webhook (messages)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#d5e8d4;strokeColor=#82b366;fontStyle=1" vertex="1" parent="zone4">
+          <mxGeometry x="20" y="40" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="mp" value="MessageProcessorService&#xa;Greeting → FAQ → Keywords →&#xa;Ollama (future: RAG)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;fontStyle=1" vertex="1" parent="zone4">
+          <mxGeometry x="240" y="40" width="200" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="svc" value="Services&#xa;FaqService · KeywordService · SettingsService&#xa;ConversationService · LeadService" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="zone4">
+          <mxGeometry x="460" y="40" width="220" height="70" as="geometry" />
+        </mxCell>
+        <mxCell id="wapp" value="WhatsAppService&#xa;(Graph API outbound)" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="zone4">
+          <mxGeometry x="20" y="130" width="160" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="ollsvc" value="OllamaService&#xa;/api/generate" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="zone4">
+          <mxGeometry x="200" y="130" width="140" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="adminapi" value="Admin + Chatbot APIs&#xa;/api/admin/* · /api/chatbot/*" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="zone4">
+          <mxGeometry x="360" y="130" width="200" height="55" as="geometry" />
+        </mxCell>
+        <mxCell id="cache" value="IMemoryCache&#xa;(keywords, settings, FAQs)" style="shape=parallelogram;perimeter=parallelogramPerimeter;whiteSpace=wrap;html=1;fillColor=#f5f5f5;strokeColor=#666666;" vertex="1" parent="zone4">
+          <mxGeometry x="580" y="125" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="note1" value="Webhook → process → save Conversation → reply via WhatsAppService" style="text;html=1;strokeColor=none;fillColor=none;align=left;verticalAlign=top;fontSize=10;fontColor=#666666;" vertex="1" parent="zone4">
+          <mxGeometry x="20" y="200" width="320" height="40" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zone5" value="PostgreSQL" style="swimlane;fontStyle=1;horizontal=0;startSize=28;fillColor=#FFE6CC;strokeColor=#D79B00;" vertex="1" parent="1">
+          <mxGeometry x="780" y="200" width="320" height="200" as="geometry" />
+        </mxCell>
+        <mxCell id="db" value="Users · Conversations · Leads&#xa;ChatbotKeywords · ChatbotSettings · ChatbotFAQs&#xa;&lt;i&gt;(future: pgvector RAG chunks)&lt;/i&gt;" style="shape=cylinder3;whiteSpace=wrap;html=1;boundedLbl=1;backgroundOutline=1;size=12;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="zone5">
+          <mxGeometry x="40" y="45" width="240" height="130" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zone6" value="Local LLM" style="swimlane;fontStyle=1;horizontal=0;startSize=28;fillColor=#F8CECC;strokeColor=#B85450;" vertex="1" parent="1">
+          <mxGeometry x="780" y="420" width="320" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="ollama" value="Ollama&#xa;localhost:11434&#xa;generate + (future embed)" style="ellipse;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;fontStyle=1" vertex="1" parent="zone6">
+          <mxGeometry x="80" y="40" width="160" height="70" as="geometry" />
+        </mxCell>
+
+        <mxCell id="zone7" value="React Admin" style="swimlane;fontStyle=1;horizontal=0;startSize=28;fillColor=#E6E6E6;strokeColor=#666666;" vertex="1" parent="1">
+          <mxGeometry x="40" y="540" width="520" height="100" as="geometry" />
+        </mxCell>
+        <mxCell id="react" value="React (Vite)&#xa;localhost:5173&#xa;Dashboard · Conversations · Leads · Keywords" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffffff;strokeColor=#666666;" vertex="1" parent="zone7">
+          <mxGeometry x="20" y="38" width="240" height="52" as="geometry" />
+        </mxCell>
+        <mxCell id="cors" value="CORS&#xa;:5173" style="text;html=1;strokeColor=none;fillColor=none;fontSize=10;" vertex="1" parent="zone7">
+          <mxGeometry x="280" y="50" width="60" height="30" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e1" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="user" target="meta">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e1l" value="messages" style="edgeLabel;html=1;align=center;verticalAlign=middle;resizable=0;points=[];fontSize=9;" vertex="1" connectable="0" parent="e1">
+          <mxGeometry x="-0.2" y="1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="e2" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="meta" target="ngrok">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="e2l" value="webhook POST" style="edgeLabel;html=1;align=center;verticalAlign=middle;fontSize=9;" vertex="1" connectable="0" parent="e2">
+          <mxGeometry x="-0.1" y="-12" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="e3" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.25;" edge="1" parent="1" source="ngrok" target="wh">
+          <mxGeometry width="50" height="50" relative="1" as="geometry"><mxPoint x="600" y="150" as="targetPoint" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="e4" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="wh" target="mp">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e5" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;" edge="1" parent="1" source="mp" target="svc">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e6" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.25;entryY=0;" edge="1" parent="1" source="mp" target="ollsvc">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e7" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=1;entryX=0.15;entryY=0;" edge="1" parent="1" source="mp" target="wapp">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+
+        <mxCell id="e8" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.35;dashed=1;" edge="1" parent="1" source="svc" target="db">
+          <mxGeometry width="50" height="50" relative="1" as="geometry"><Array as="points"><mxPoint x="750" y="285" /><mxPoint x="750" y="250" /></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e8l" value="EF Core" style="edgeLabel;html=1;fontSize=9;" vertex="1" connectable="0" parent="e8">
+          <mxGeometry x="-0.3" y="1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="e9" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.5;dashed=1;" edge="1" parent="1" source="ollsvc" target="ollama">
+          <mxGeometry width="50" height="50" relative="1" as="geometry"><Array as="points"><mxPoint x="720" y="258" /><mxPoint x="720" y="455" /></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e9l" value="HTTP" style="edgeLabel;html=1;fontSize=9;" vertex="1" connectable="0" parent="e9">
+          <mxGeometry x="-0.2" y="1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="e10" style="endArrow=classic;html=1;rounded=0;exitX=0.5;exitY=0;entryX=0.5;entryY=1;" edge="1" parent="1" source="wapp" target="meta">
+          <mxGeometry width="50" height="50" relative="1" as="geometry"><Array as="points"><mxPoint x="120" y="180" /><mxPoint x="300" y="180" /><mxPoint x="300" y="170" /></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e10l" value="Bearer token" style="edgeLabel;html=1;fontSize=9;" vertex="1" connectable="0" parent="e10">
+          <mxGeometry x="-0.4" y="2" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="e11" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.75;dashed=1;" edge="1" parent="1" source="react" target="adminapi">
+          <mxGeometry width="50" height="50" relative="1" as="geometry"><Array as="points"><mxPoint x="600" y="566" /><mxPoint x="600" y="268" /></Array></mxGeometry>
+        </mxCell>
+        <mxCell id="e11l" value="HTTPS" style="edgeLabel;html=1;fontSize=9;" vertex="1" connectable="0" parent="e11">
+          <mxGeometry x="-0.2" y="1" relative="1" as="geometry"><mxPoint as="offset" /></mxGeometry>
+        </mxCell>
+
+        <mxCell id="e12" style="endArrow=classic;html=1;rounded=0;exitX=1;exitY=0.5;entryX=0;entryY=0.7;dashed=1;" edge="1" parent="1" source="adminapi" target="db">
+          <mxGeometry width="50" height="50" relative="1" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

@@ -1,0 +1,50 @@
+<mxfile host="app.diagrams.net" agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36" version="29.6.4">
+  <diagram id="SimpleArch" name="Simple Architecture">
+    <mxGraphModel dx="10778" dy="5705" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1169" pageHeight="827" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="user" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="User (WhatsApp)" vertex="1">
+          <mxGeometry height="60" width="140" x="50" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="meta" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Meta WhatsApp Cloud API" vertex="1">
+          <mxGeometry height="60" width="180" x="230" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="webhook" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value=".NET Webhook API" vertex="1">
+          <mxGeometry height="60" width="160" x="450" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="processor" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Message Processor" vertex="1">
+          <mxGeometry height="60" width="160" x="650" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="cache" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Response Cache" vertex="1">
+          <mxGeometry height="60" width="160" x="650" y="100" as="geometry" />
+        </mxCell>
+        <mxCell id="faq" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="FAQ Service" vertex="1">
+          <mxGeometry height="60" width="140" x="650" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="guard" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Domain Guard" vertex="1">
+          <mxGeometry height="60" width="140" x="820" y="300" as="geometry" />
+        </mxCell>
+        <mxCell id="vector" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Vector Search (pgvector)" vertex="1">
+          <mxGeometry height="60" width="180" x="1000" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="db" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="PostgreSQL (Knowledge Base + Embeddings)" vertex="1">
+          <mxGeometry height="70" width="220" x="1000" y="320" as="geometry" />
+        </mxCell>
+        <mxCell id="ollama" parent="1" style="rounded=1;whiteSpace=wrap;html=1;" value="Ollama (Mistral LLM)" vertex="1">
+          <mxGeometry height="60" width="180" x="1220" y="200" as="geometry" />
+        </mxCell>
+        <mxCell id="bK8CIt7hhy9OfP6TB_Cr-1" edge="1" parent="1" source="user" target="meta" />
+        <mxCell id="bK8CIt7hhy9OfP6TB_Cr-2" edge="1" parent="1" source="meta" target="webhook" />
+        <mxCell id="bK8CIt7hhy9OfP6TB_Cr-3" edge="1" parent="1" source="webhook" target="processor" />
+        <mxCell id="bK8CIt7hhy9OfP6TB_Cr-4" edge="1" parent="1" source="processor" target="cache" />
+        <mxCell id="bK8CIt7hhy9OfP6TB_Cr-5" edge="1" parent="1" source="processor" target="faq" />
+        <mxCell id="bK8CIt7hhy9OfP6TB_Cr-6" edge="1" parent="1" source="processor" target="guard" />
+        <mxCell id="bK8CIt7hhy9OfP6TB_Cr-7" edge="1" parent="1" source="processor" target="vector" />
+        <mxCell id="bK8CIt7hhy9OfP6TB_Cr-8" edge="1" parent="1" source="vector" target="db" />
+        <mxCell id="bK8CIt7hhy9OfP6TB_Cr-9" edge="1" parent="1" source="vector" target="ollama" />
+        <mxCell id="bK8CIt7hhy9OfP6TB_Cr-10" edge="1" parent="1" source="ollama" target="processor" />
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
